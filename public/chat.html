@@ -1,0 +1,34 @@
+<body>
+    <div class="title">
+        当前聊天室<div id='count'>0</div>人
+    </div>
+    <div id="aaa" class="content title"></div>
+    <div class="fasong title">
+        <textarea id="textxinxi" class="xinxi"></textarea>
+        <input type="button" value="发送" class="fasongbtn" onclick="fasong()"/>
+    </div>
+    <script>
+        ws = new WebSocket("ws://siteb.com:2346/");
+        ws.onopen = function(){
+
+            var uid = Math.round(Math.random()*10);
+
+            ws.send(uid);
+            alert(uid);
+        };
+        ws.onmessage = function(e){
+            var aaa = document.getElementById("aaa");
+            var count = document.getElementById("count");
+            var data = e.data.split("||")[0]; // 根据||截取字符串, 前面为放内容, 后买为当前聊天室人数
+            var count1 = e.data.split("||")[1];
+            aaa.innerHTML += data + '<br/>'; // 插入新的聊天内容
+            count.innerHTML = count1; // 修改聊天室人数
+        };
+        function fasong(){
+            let textxinxi = document.getElementById("textxinxi").value;
+            let text = '';
+            document.getElementById("textxinxi").value = text; // 发送新内容
+            ws.send(textxinxi);
+        }
+    </script>
+</body>
